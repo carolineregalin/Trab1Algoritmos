@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.PilhaLista;
 
-/**
- *
- * @author bruno
- */
+package estruturas.com.PilhaLista;
+
 public class PilhaVetor<T> implements Pilha<T> {
      private T[] vet;
      private int tam;
@@ -19,7 +11,6 @@ public class PilhaVetor<T> implements Pilha<T> {
     Cria uma pilha com o tamanho especificado 
     tam Capacidade máxima de empilhamento
     */
-    
     public PilhaVetor(int tam){
         vet = (T[]) new Object[tam];
         this.tam = tam;
@@ -30,12 +21,12 @@ public class PilhaVetor<T> implements Pilha<T> {
     Empilha um dado
     v Dado a ser empilhado
     */
-    
-    public void push(T v){
+    @Override
+    public void push(Object v){
         /*if (n == tam) {
             throw new PilhaCheiaException();
         } else {*/
-           vet[n] = v;
+           vet[n] = (T)v;
            n++; 
         }
         
@@ -45,7 +36,7 @@ public class PilhaVetor<T> implements Pilha<T> {
     Retira um dado da pilha
     @return dado desempilhado
     */
-    
+    @Override
     public T pop(){
         
         T valor = peek();
@@ -60,7 +51,7 @@ public class PilhaVetor<T> implements Pilha<T> {
     Rtorna true se a pilha estiver vazia
     @return true se a pilha estiver vazia
     */
-    
+    @Override
     public boolean vazia(){    
         return (n==0);
     }
@@ -69,7 +60,6 @@ public class PilhaVetor<T> implements Pilha<T> {
     Retorna o conteúdo do topo da pilha
     @return topo da pilha
     */
-    
     @Override
     public T peek(){
         /* if (estaVazia()) 
@@ -81,7 +71,7 @@ public class PilhaVetor<T> implements Pilha<T> {
     Desempilha todos os dados da pilha
     */
     
-    
+    @Override
     public void libera(){
         
         //1a implementação
@@ -113,11 +103,15 @@ public class PilhaVetor<T> implements Pilha<T> {
     Concatena a pilha corrente com outra pilha
     @param p Pilha ser concatenada a pilha atual
     */
-    
     public void concatenar(PilhaVetor<T> p){
         for (int i = 0; i < p.n; i++) {
             this.push(p.vet[i]);
         }
+    }
+
+    @Override
+    public int getTamanho() {
+        return this.n;
     }
      
     

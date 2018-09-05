@@ -1,4 +1,4 @@
-package com.PilhaLista;
+package estruturas.com.PilhaLista;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,5 +17,6 @@ public interface Pilha<T> {
     T peek(); 
     boolean vazia(); 
     void libera();
+    int getTamanho();
     
 }

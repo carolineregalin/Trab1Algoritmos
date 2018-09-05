@@ -1,47 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.PilhaLista;
-import com.ListaEncadeada.ListaEncadeada;
-import com.Exception.PilhaVaziaException;
+package estruturas.com.PilhaLista;
+import estruturas.com.ListaEncadeada.ListaEncadeada;
 
-
-/**
- *
- * @author daniel
- */
 public class PilhaLista<T> implements Pilha<T> {
 
     private ListaEncadeada lista = new ListaEncadeada<T>();
 
-    @Override
-    public void push(T v) {
+    public void push(Object v) {
         //lança erro de quantidade quando vetor esta cheio
-        lista.inserir(v);
+        lista.inserir((T)v);
     }
 
-    @Override
     public T pop() {
         if (lista.obterComprimento() == 0) {
             try {
-                throw new PilhaVaziaException("A lista está vazia!");
-            } catch (PilhaVaziaException ex) {
+                throw new RuntimeException("A lista está vazia!");
+            } catch (RuntimeException ex) {
                 throw new RuntimeException();
             }
         }
         T aux = (T) lista.getPrimeiro().getInfo();
-        lista.retirar(lista.getPrimeiro().getInfo());
+        lista.retirar(aux);
         return aux;
     }
 
-    @Override
     public T peek() {
         if (lista.obterComprimento() == 0) {
             try {
-                throw new PilhaVaziaException("A lista está vazia!");
-            } catch (PilhaVaziaException ex) {
+                throw new RuntimeException("A lista está vazia!");
+            } catch (RuntimeException ex) {
                 throw new RuntimeException();
             }
         }
@@ -49,7 +35,6 @@ public class PilhaLista<T> implements Pilha<T> {
         return aux;
     }
 
-    @Override
     public boolean vazia() {
         if (lista.obterComprimento() > 0) {
             return false;
@@ -58,7 +43,6 @@ public class PilhaLista<T> implements Pilha<T> {
         }
     }
 
-    @Override
     public void libera() {
         ListaEncadeada lista2 = new ListaEncadeada<T>();
         this.lista = lista2;
@@ -67,6 +51,10 @@ public class PilhaLista<T> implements Pilha<T> {
     @Override
     public String toString() {
         return lista.toString();
+    }
+    @Override
+    public int getTamanho(){
+        return this.lista.obterComprimento();
     }
     
 }

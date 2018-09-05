@@ -1,14 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.View;
 
-import com.ListaEncadeada.ListaEncadeada;
-import trabalho.Calculadora;
+package estruturas.com.View;
+
+import estruturas.com.ListaEncadeada.ListaEncadeada;
+import estruturas.com.PilhaLista.PilhaLista;
+import estruturas.com.PilhaLista.PilhaVetor;
+import estruturas.trabalho.Calculadora;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -108,13 +109,18 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_calcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_calcularActionPerformed
-        // TODO add your handling code here:
         Calculadora c = new Calculadora();
         ListaEncadeada<String> termosInfixada = c.extrairTermos(tf_expressao.getText());
         ListaEncadeada<String> termosPosfixada = c.gerarExprPosfixadaPl(termosInfixada);
-        ListaEncadeada<String> finalPilhaLista = c.exibir(termosPosfixada);
-        //double resultado = c.calcularExprPosfixada(termosPosfixada);
-        tf_result.setText(String.valueOf(finalPilhaLista)); 
+        PilhaLista<String> tipo_pilha = new PilhaLista();
+        PilhaLista<String> finalPilhaLista = null;
+        try {
+            finalPilhaLista = (PilhaLista)c.exibir(termosPosfixada, tipo_pilha);
+            tipo_pilha = new PilhaLista();
+            tf_result.setText(String.valueOf(c.calcular(finalPilhaLista, tipo_pilha))); 
+        } catch (Exception ex) {
+        }
+        
     }//GEN-LAST:event_bt_calcularActionPerformed
 
     private void tf_resultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_resultActionPerformed
@@ -122,11 +128,19 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_tf_resultActionPerformed
 
     private void bt_pilhaVetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_pilhaVetorActionPerformed
-       Calculadora c = new Calculadora();
+  
+        Calculadora c = new Calculadora();
         ListaEncadeada<String> termosInfixada = c.extrairTermos(tf_expressao.getText());
-        ListaEncadeada<String> termosPosfixada = c.gerarExprPosfixadaPv(termosInfixada);
-        ListaEncadeada<String> finalVetor = c.exibir(termosPosfixada);
-        tf_result.setText(String.valueOf(finalVetor)); 
+        ListaEncadeada<String> termosPosfixada = c.gerarExprPosfixadaPl(termosInfixada);
+        int qtd = termosPosfixada.obterComprimento();
+        PilhaVetor<String> tipo_pilha = new PilhaVetor(qtd);
+        PilhaVetor<String> finalPilhaVetor = null;
+        try {
+            finalPilhaVetor = (PilhaVetor)c.exibir(termosPosfixada, tipo_pilha);
+            tipo_pilha = new PilhaVetor(qtd);
+            tf_result.setText(String.valueOf(c.calcular(finalPilhaVetor, tipo_pilha))); 
+        } catch (Exception ex) {
+        }
     }//GEN-LAST:event_bt_pilhaVetorActionPerformed
 
     /**

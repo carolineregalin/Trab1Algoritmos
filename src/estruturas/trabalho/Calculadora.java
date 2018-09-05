@@ -1,24 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package trabalho;
+package estruturas.trabalho;
 
-import com.FilaLista.FilaLista;
-import com.ListaEncadeada.ListaEncadeada;
-import com.PilhaLista.PilhaLista;
-import com.PilhaLista.PilhaVetor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import estruturas.com.ListaEncadeada.ListaEncadeada;
+import estruturas.com.PilhaLista.Pilha;
+import estruturas.com.PilhaLista.PilhaLista;
+import estruturas.com.PilhaLista.PilhaVetor;
+import java.*;
 
-/**
- *
- * @author Daniel Borba Varela dos Santos e Bruno Henrique de Borba
- */
 public class Calculadora {
 
     ListaEncadeada<String> a = new ListaEncadeada<>();
@@ -186,13 +173,68 @@ public class Calculadora {
 
     }
     
-    public ListaEncadeada exibir(ListaEncadeada<String> exprPosfixada){
-        ListaEncadeada nova = new ListaEncadeada();
+    public Pilha exibir(ListaEncadeada<String> exprPosfixada, Pilha<String> nova) throws Exception{
         while (!(exprPosfixada.estaVazia()) ) {            
-            nova.inserir(exprPosfixada.retirar(exprPosfixada.getPrimeiro().getInfo()));
+            nova.push(exprPosfixada.retirar(exprPosfixada.getPrimeiro().getInfo()));
         }
         return nova;
     }
- 
+    public double calcular(Pilha<String> exprPosFixada, Pilha pilhaOperandos) throws Exception{
+
+        // Variáveis auxiliares
+        double resultado = 0;
+        double aux1 = 0;
+        double aux2 = 0;
+        
+        while(!exprPosFixada.vazia()){
+            //Pega o primeiro item da pilha
+            String aux = exprPosFixada.peek();
+            // Se for operando
+            // Verifica se é um número positivo, negativo ou 
+            if (aux.matches("^-?[0-9]\\d*(\\,\\d+)?$")) {
+                // Inserir na pilha
+                pilhaOperandos.push(aux);
+                // Remove ele da fila
+                exprPosFixada.pop();
+            }else { // Se for operador
+                // Caso não haja elementos suficientes na pilha (pelo menos dois) para realizar a operação
+                if (pilhaOperandos.getTamanho() < 2) {
+                    throw new IllegalArgumentException("Não há o número mínimo (dois) de parâmetros para realizar uma operação!");
+                }
+                // Calcula a operação enviando o operador e os dois operandos
+                resultado = calcularValor(exprPosFixada.pop(), Double.valueOf(((String)pilhaOperandos.pop()).replace(",", ".")), Double.valueOf(((String)pilhaOperandos.pop()).replace(",", ".")));
+                // Joga os valores pra pilha de operandos
+                pilhaOperandos.push(String.valueOf(resultado));
+            }
+            
+        }
+        // Retorna o valor da expressão
+        return Double.valueOf((String)pilhaOperandos.pop());
+    
+    }
+    
+    private double calcularValor(String operacao, double valorUm, double valorDois) {
+        // Verifica qual operação realizar
+        switch (operacao) {
+            // Soma
+            case "+":
+                // Realiza a operação
+                return valorUm + valorDois;
+            // Subtração
+            case "-":
+                return valorDois - valorUm;
+            // Multiplicação
+            case "*":
+                return valorUm * valorDois;
+            // Divisão
+            case "/":
+                if (valorUm == 0) {
+                    throw new IllegalArgumentException("Operação inválida, impossível dividir por zero!");
+                }
+                return valorDois / valorUm;
+            default:
+                throw new IllegalArgumentException("Operação inválida!");
+        }
+    }
 
 }
